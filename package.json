@@ -1,5 +1,5 @@
 {
-  "name": "cordova-plugin-speech-recognition",
+  "name": "cordova-plugin-speechrecognition",
   "version": "1.0.0",
   "description": "Cordova Plugin for Speech Recognition",
   "cordova": {
