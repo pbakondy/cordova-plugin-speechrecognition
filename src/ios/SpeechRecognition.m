@@ -171,10 +171,9 @@
 
 - (void)hasPermission:(CDVInvokedUrlCommand*)command {
     SFSpeechRecognizerAuthorizationStatus status = [SFSpeechRecognizer authorizationStatus];
-    BOOL speechAuuthGranted = (status == SFSpeechRecognizerAuthorizationStatusAuthorized);
+    BOOL speechAuthGranted = (status == SFSpeechRecognizerAuthorizationStatusAuthorized);
 
-
-    if (!speechAuuthGranted) {
+    if (!speechAuthGranted) {
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:NO];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
