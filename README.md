@@ -23,7 +23,8 @@ cordova plugin add cordova-plugin-speech-recognition
 ### isRecognitionAvailable()
 
 ```js
-window.plugins.speechRecognition.isRecognitionAvailable(Function successCallback, Function errorCallback)
+window.plugins.speechRecognition.isRecognitionAvailable(
+  Function successCallback, Function errorCallback)
 ```
 
 Result of success callback is a `Boolean`.
@@ -31,7 +32,9 @@ Result of success callback is a `Boolean`.
 ### startListening()
 
 ```js
-window.plugins.speechRecognition.startListening(Function successCallback, Function errorCallback, String language, Number matches, String prompt)
+window.plugins.speechRecognition.startListening(
+  Function successCallback, Function errorCallback,
+  String language, Number matches, String prompt)
 ```
 
 This method has 3 optional parameters:
@@ -49,7 +52,8 @@ There is a difference between Android and iOS platforms. On Android speech recog
 iOS only method.
 
 ```js
-window.plugins.speechRecognition.stopListening(Function successCallback, Function errorCallback)
+window.plugins.speechRecognition.stopListening(
+  Function successCallback, Function errorCallback)
 ```
 
 Stop the recognition process. No return value.
@@ -57,7 +61,8 @@ Stop the recognition process. No return value.
 ### getSupportedLanguages()
 
 ```js
-window.plugins.speechRecognition.getSupportedLanguages(Function successCallback, Function errorCallback)
+window.plugins.speechRecognition.getSupportedLanguages(
+  Function successCallback, Function errorCallback)
 ```
 
 Result of success callback is an `Array` of supported languages.
@@ -94,7 +99,8 @@ let supportedLanguagesIOS =
 ### hasPermission()
 
 ```js
-window.plugins.speechRecognition.hasPermission(Function successCallback, Function errorCallback)
+window.plugins.speechRecognition.hasPermission(
+  Function successCallback, Function errorCallback)
 ```
 
 Result of success callback is a `Boolean`.
@@ -102,7 +108,8 @@ Result of success callback is a `Boolean`.
 ### requestPermission()
 
 ```js
-window.plugins.speechRecognition.requestPermission(Function successCallback, Function errorCallback)
+window.plugins.speechRecognition.requestPermission(
+  Function successCallback, Function errorCallback)
 ```
 
 This method requests access permission to system resources it was not granted before.
