@@ -1,0 +1,36 @@
+{
+  "name": "cordova-plugin-speech-recognition",
+  "version": "1.0.0",
+  "description": "Cordova Plugin for Speech Recognition",
+  "cordova": {
+    "id": "cordova-plugin-speech-recognition",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pbakondy/cordova-plugin-speech-recognition.git"
+  },
+  "keywords": [
+    "cordova",
+    "speech",
+    "recognition",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Peter Bakondy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pbakondy/cordova-plugin-speech-recognition/issues"
+  },
+  "homepage": "https://github.com/pbakondy/cordova-plugin-speech-recognition#readme"
+}

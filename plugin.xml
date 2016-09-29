@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="cordova-plugin-speech-recognition"
+  version="1.0.0">
+  <name>Speech Recognition</name>
+  <description>Cordova Plugin for Speech Recognition</description>
+  <license>MIT</license>
+  <keywords>cordova,speech,recognition</keywords>
+  <repo>https://github.com/pbakondy/cordova-plugin-speech-recognition</repo>
+  <issue>https://github.com/pbakondy/cordova-plugin-speech-recognition/issues</issue>
+
+  <engines>
+    <engine name="cordova" version=">=3.0.0"/>
+  </engines>
+
+  <js-module src="www/speechRecognition.js" name="SpeechRecognition">
+    <merges target="window.plugins.speechRecognition" />
+  </js-module>
+
+  <!-- android -->
+  <platform name="android">
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="SpeechRecognition">
+        <param name="android-package" value="com.pbakondy.SpeechRecognition"/>
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    </config-file>
+
+    <framework src="com.android.support:support-v4:+" />
+
+    <source-file src="src/android/com/pbakondy/SpeechRecognition.java" target-dir="src/com/pbakondy" />
+    <source-file src="src/android/com/pbakondy/LanguageDetailsChecker.java" target-dir="src/com/pbakondy" />
+  </platform>
+
+  <!-- ios -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="SpeechRecognition">
+        <param name="ios-package" value="SpeechRecognition" />
+      </feature>
+    </config-file>
+
+    <config-file target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+      <string>Request to use Microphone</string>
+    </config-file>
+
+    <config-file target="*-Info.plist" parent="NSSpeechRecognitionUsageDescription">
+      <string>Request to use Speech Recognition</string>
+    </config-file>
+
+    <header-file src="src/ios/SpeechRecognition.h"/>
+    <source-file src="src/ios/SpeechRecognition.m"/>
+  </platform>
+
+</plugin>
