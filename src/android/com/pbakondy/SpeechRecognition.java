@@ -45,7 +45,7 @@ public class SpeechRecognition extends CordovaPlugin {
   // android.speech.extra.MAX_RESULTS
   private static final int MAX_RESULTS = 5;
 
-  private static final String NOT_AVAILABLE = "Speech recognition service is available on the system.";
+  private static final String NOT_AVAILABLE = "Speech recognition service is not available on the system.";
   private static final String MISSING_PERMISSION = "Missing permission";
 
   private static final String RECORD_AUDIO_PERMISSION = Manifest.permission.RECORD_AUDIO;
