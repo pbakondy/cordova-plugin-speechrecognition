@@ -1,4 +1,4 @@
-# cordova-plugin-speech-recognition
+# cordova-plugin-speechrecognition
 
 [![npm](https://img.shields.io/npm/v/cordova-plugin-speechrecognition.svg)](https://www.npmjs.com/package/cordova-plugin-speechrecognition)
 ![Platform](https://img.shields.io/badge/platform-android%20%7C%20ios-lightgrey.svg)
@@ -10,7 +10,7 @@ This is a cordova plugin for Speech Recognition.
 ## Installation
 
 ```
-cordova plugin add cordova-plugin-speech-recognition
+cordova plugin add cordova-plugin-speechrecognition
 ```
 
 ## Supported Platforms
@@ -163,4 +163,4 @@ Because your app may need to connect to the servers to perform recognition, it's
 
 ## LICENSE
 
-**cordova-plugin-speech-recognition** is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
+**cordova-plugin-speechrecognition** is licensed under the MIT Open Source license. For more information, see the LICENSE file in this repository.
