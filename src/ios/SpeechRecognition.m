@@ -62,7 +62,7 @@
 
         NSString* language = [command argumentAtIndex:0];
         int matches = [[command argumentAtIndex:1] intValue];
-        bool showPartial = [[command argumentAtIndex:3] boolValue];
+        BOOL showPartial = [[command argumentAtIndex:3] boolValue];
         if (language == nil) {
             language = DEFAULT_LANGUAGE;
         }
