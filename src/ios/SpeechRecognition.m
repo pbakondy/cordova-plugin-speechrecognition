@@ -9,7 +9,7 @@
 
 #define DEFAULT_LANGUAGE @"en-US"
 #define DEFAULT_MATCHES 5
-#define DEFAULT_SHOWPARTIAL NO
+#define DEFAULT_SHOWPARTIAL [NSNumber numberWithBool:NO];
 
 #define MESSAGE_MISSING_PERMISSION @"Missing permission"
 #define MESSAGE_ACCESS_DENIED @"User denied access to speech recognition"
@@ -62,7 +62,7 @@
 
         NSString* language = [command argumentAtIndex:0];
         int matches = [[command argumentAtIndex:1] intValue];
-        BOOL showPartial = [[command argumentAtIndex:3] boolValue];
+        NSNumber* showPartial = [command argumentAtIndex:3];
         if (language == nil) {
             language = DEFAULT_LANGUAGE;
         }
