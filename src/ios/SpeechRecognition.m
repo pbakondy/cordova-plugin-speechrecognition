@@ -9,6 +9,7 @@
 
 #define DEFAULT_LANGUAGE @"en-US"
 #define DEFAULT_MATCHES 5
+#define DEFAULT_SHOWPARTIAL [NSNumber numberWithBool:NO];
 
 #define MESSAGE_MISSING_PERMISSION @"Missing permission"
 #define MESSAGE_ACCESS_DENIED @"User denied access to speech recognition"
@@ -61,13 +62,18 @@
 
         NSString* language = [command argumentAtIndex:0];
         int matches = [[command argumentAtIndex:1] intValue];
-        bool showPartial = [[command argumentAtIndex:3] boolValue];
+        NSNumber* showPartialNum = [command argumentAtIndex:3];
         if (language == nil) {
             language = DEFAULT_LANGUAGE;
         }
         if (matches == 0) {
             matches = DEFAULT_MATCHES;
         }
+        if (showPartialNum == nil) {
+            showPartialNum = DEFAULT_SHOWPARTIAL;
+        }
+        BOOL showPartial = [showPartialNum boolValue];
+
 
         NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
         self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:locale];
