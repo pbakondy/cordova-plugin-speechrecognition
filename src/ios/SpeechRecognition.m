@@ -9,6 +9,7 @@
 
 #define DEFAULT_LANGUAGE @"en-US"
 #define DEFAULT_MATCHES 5
+#define DEFAULT_SHOWPARTIAL [NSNumber numberWithBool:NO];
 
 #define MESSAGE_MISSING_PERMISSION @"Missing permission"
 #define MESSAGE_ACCESS_DENIED @"User denied access to speech recognition"
@@ -61,12 +62,18 @@
 
         NSString* language = [command argumentAtIndex:0];
         int matches = [[command argumentAtIndex:1] intValue];
+        NSNumber* showPartialNum = [command argumentAtIndex:3];
         if (language == nil) {
             language = DEFAULT_LANGUAGE;
         }
         if (matches == 0) {
             matches = DEFAULT_MATCHES;
         }
+        if (showPartialNum == nil) {
+            showPartialNum = DEFAULT_SHOWPARTIAL;
+        }
+        BOOL showPartial = [showPartialNum boolValue];
+
 
         NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:language];
         self.speechRecognizer = [[SFSpeechRecognizer alloc] initWithLocale:locale];
@@ -84,14 +91,14 @@
         [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 
         self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
-        self.recognitionRequest.shouldReportPartialResults = NO;
+        self.recognitionRequest.shouldReportPartialResults = showPartial;
 
         AVAudioInputNode *inputNode = self.audioEngine.inputNode;
         AVAudioFormat *format = [inputNode outputFormatForBus:0];
 
         self.recognitionTask = [self.speechRecognizer recognitionTaskWithRequest:self.recognitionRequest resultHandler:^(SFSpeechRecognitionResult *result, NSError *error) {
 
-            if ( result && result.isFinal ) {
+            if ( result ) {
 
                 NSMutableArray *resultArray = [[NSMutableArray alloc] init];
 
@@ -108,6 +115,9 @@
                 NSLog(@"startListening() recognitionTask result array: %@", transcriptions.description);
 
                 CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:transcriptions];
+                if (showPartial){
+                    [pluginResult setKeepCallbackAsBool:YES];
+                }
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }
 
@@ -121,6 +131,9 @@
                 self.recognitionTask = nil;
 
                 CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
+                if (showPartial){
+                    [pluginResult setKeepCallbackAsBool:YES];
+                }
                 [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             }
 

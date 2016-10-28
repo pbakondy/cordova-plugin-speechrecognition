@@ -34,7 +34,7 @@ Result of success callback is a `Boolean`.
 ```js
 window.plugins.speechRecognition.startListening(
   Function successCallback, Function errorCallback,
-  String language, Number matches, String prompt)
+  String language, Number matches, String prompt, Boolean showPartial)
 ```
 
 This method has 3 optional parameters:
@@ -42,6 +42,7 @@ This method has 3 optional parameters:
 - `language` {String} used language for recognition (default "en-US")
 - `matches` {Number} number of return matches (default 5, on iOS: maximum number of matches)
 - `prompt` {String} displayed prompt of listener popup window (default "", Android only)
+- `showPartial` {Boolean} Allow partial results to be returned (default false, iOS only)
 
 Result of success callback is an `Array` of recognized terms.
 
