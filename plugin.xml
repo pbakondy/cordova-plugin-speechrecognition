@@ -54,6 +54,8 @@
 
     <header-file src="src/ios/SpeechRecognition.h"/>
     <source-file src="src/ios/SpeechRecognition.m"/>
+
+    <framework src="Speech.framework" />
   </platform>
 
 </plugin>
