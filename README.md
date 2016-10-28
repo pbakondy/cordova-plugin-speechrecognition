@@ -37,16 +37,18 @@ window.plugins.speechRecognition.startListening(
   String language, Number matches, String prompt, Boolean showPartial)
 ```
 
-This method has 3 optional parameters:
+This method has 4 optional parameters:
 
-- `language` {String} used language for recognition (default "en-US")
-- `matches` {Number} number of return matches (default 5, on iOS: maximum number of matches)
-- `prompt` {String} displayed prompt of listener popup window (default "", Android only)
-- `showPartial` {Boolean} Allow partial results to be returned (default false, iOS only)
+- `language` {String} used language for recognition (default `"en-US"`)
+- `matches` {Number} number of return matches (default `5`, on iOS: maximum number of matches)
+- `prompt` {String} displayed prompt of listener popup window (default `""`, Android only)
+- `showPartial` {Boolean} Allow partial results to be returned (default `false`, iOS only)
 
 Result of success callback is an `Array` of recognized terms.
 
 There is a difference between Android and iOS platforms. On Android speech recognition stops when the speaker finishes speaking (at end of sentence). On iOS the user has to stop manually the recognition process by calling stopListening() method.
+
+If you set `showPartial` to `true` on iOS the success callback will be called multiple times until `stopListening()` called.
 
 ### stopListening()
 
