@@ -118,7 +118,6 @@ window.plugins.speechRecognition.requestPermission(
 This method requests access permission to system resources it was not granted before.
 
 
-
 ## Android Quirks
 
 ### Requirements
@@ -150,6 +149,8 @@ It uses [Speech API](https://cloud.google.com/speech/) of Google. The Android pu
 The Speech APIs perform speech recognition by communicating with Apple's servers or using an on-device speech recognizer, if available.
 
 Because your app may need to connect to the servers to perform recognition, it's essential that you respect the privacy of your users and treat their utterances as sensitive data. For this reason, you must get the user's explicit permission before you initiate speech recognition.
+
+The plugin works in [AVAudioSessionCategoryPlayAndRecord](https://developer.apple.com/reference/avfoundation/avaudiosessioncategoryplayandrecord) mode to enable playing audio.
 
 
 ### Further readings
