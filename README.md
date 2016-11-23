@@ -124,7 +124,7 @@ window.plugins.speechRecognition.requestPermission(
   Function successCallback, Function errorCallback)
 ```
 
-This method requests access permission to system resources it was not granted before.
+This method requests access permission to system resources if it was not granted before.
 
 
 ## Android Quirks
