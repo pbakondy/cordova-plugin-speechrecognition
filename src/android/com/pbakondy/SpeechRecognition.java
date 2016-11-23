@@ -15,14 +15,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
+
 import android.Manifest;
+import android.os.Build;
+import android.os.Bundle;
+
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
 import android.util.Log;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +60,8 @@ public class SpeechRecognition extends CordovaPlugin {
   private LanguageDetailsChecker languageDetailsChecker;
   private Activity activity;
   private Context context;
+  private View view;
+  private SpeechRecognizer recognizer;
 
   @Override
   public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -61,6 +69,17 @@ public class SpeechRecognition extends CordovaPlugin {
 
     activity = cordova.getActivity();
     context = webView.getContext();
+    view = webView.getView();
+
+    view.post(new Runnable() {
+      @Override
+      public void run() {
+        recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+        SpeechRecognitionListener listener = new SpeechRecognitionListener();
+        recognizer.setRecognitionListener(listener);
+      }
+    });
+
   }
 
   @Override
@@ -87,11 +106,21 @@ public class SpeechRecognition extends CordovaPlugin {
           return true;
         }
 
-        String lang = args.optString(0, Locale.getDefault().toString());
-        int matches = args.optInt(1, MAX_RESULTS);
-        String prompt = args.optString(2, "");
+        String lang = args.optString(0);
+        if (lang == null || lang.isEmpty() || lang.equals("null")) {
+          lang = Locale.getDefault().toString();
+        }
 
-        startListening(lang, matches, prompt);
+        int matches = args.optInt(1, MAX_RESULTS);
+
+        String prompt = args.optString(2);
+        if (prompt == null || prompt.isEmpty() || prompt.equals("null")) {
+          prompt = null;
+        }
+
+        Boolean showPopup = args.optBoolean(4, true);
+
+        startListening(lang, matches, prompt, showPopup);
 
         return true;
       }
@@ -128,20 +157,33 @@ public class SpeechRecognition extends CordovaPlugin {
     return SpeechRecognizer.isRecognitionAvailable(context);
   }
 
-  private void startListening(String language, int matches, String prompt) {
-    Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt);
+  private void startListening(String language, int matches, String prompt, Boolean showPopup) {
+    Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt + ", showPopup: " + showPopup);
 
-    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
     intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, matches);
+    intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
+            activity.getPackageName());
 
-    if (!("".equals(prompt))) {
+    if (prompt != null) {
       intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
     }
 
-    cordova.startActivityForResult(this, intent, REQUEST_CODE_SPEECH);
+    if (showPopup) {
+      cordova.startActivityForResult(this, intent, REQUEST_CODE_SPEECH);
+    } else {
+
+      view.post(new Runnable() {
+        @Override
+        public void run() {
+          recognizer.startListening(intent);
+        }
+      });
+
+    }
   }
 
   private void getSupportedLanguages() {
@@ -205,6 +247,97 @@ public class SpeechRecognition extends CordovaPlugin {
     }
 
     super.onActivityResult(requestCode, resultCode, data);
+  }
+
+
+  private class SpeechRecognitionListener implements RecognitionListener {
+
+    @Override
+    public void onBeginningOfSpeech() {
+    }
+
+    @Override
+    public void onBufferReceived(byte[] buffer) {
+    }
+
+    @Override
+    public void onEndOfSpeech() {
+    }
+
+    @Override
+    public void onError(int errorCode) {
+      String errorMessage = getErrorText(errorCode);
+      Log.d(LOG_TAG, "Error: " + errorMessage);
+      callbackContext.error(errorMessage);
+    }
+
+    @Override
+    public void onEvent(int eventType, Bundle params) {
+    }
+
+    @Override
+    public void onPartialResults(Bundle partialResults) {
+    }
+
+    @Override
+    public void onReadyForSpeech(Bundle params) {
+      Log.d(LOG_TAG, "onReadyForSpeech");
+    }
+
+    @Override
+    public void onResults(Bundle results) {
+      ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+      Log.d(LOG_TAG, "SpeechRecognitionListener results: " + matches);
+
+      try {
+        JSONArray jsonMatches = new JSONArray(matches);
+        callbackContext.success(jsonMatches);
+      } catch (Exception e) {
+        e.printStackTrace();
+        callbackContext.error(e.getMessage());
+      }
+    }
+
+    @Override
+    public void onRmsChanged(float rmsdB) {
+    }
+
+    private String getErrorText(int errorCode) {
+      String message;
+      switch (errorCode) {
+        case SpeechRecognizer.ERROR_AUDIO:
+          message = "Audio recording error";
+          break;
+        case SpeechRecognizer.ERROR_CLIENT:
+          message = "Client side error";
+          break;
+        case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+          message = "Insufficient permissions";
+          break;
+        case SpeechRecognizer.ERROR_NETWORK:
+          message = "Network error";
+          break;
+        case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+          message = "Network timeout";
+          break;
+        case SpeechRecognizer.ERROR_NO_MATCH:
+          message = "No match";
+          break;
+        case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+          message = "RecognitionService busy";
+          break;
+        case SpeechRecognizer.ERROR_SERVER:
+          message = "error from server";
+          break;
+        case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+          message = "No speech input";
+          break;
+        default:
+          message = "Didn't understand, please try again.";
+          break;
+      }
+      return message;
+    }
   }
 
 }
