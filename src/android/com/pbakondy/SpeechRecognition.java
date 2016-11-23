@@ -221,9 +221,20 @@ public class SpeechRecognition extends CordovaPlugin {
 
   private void requestPermission(String type) {
     if (!audioPermissionGranted(type)) {
-      ActivityCompat.requestPermissions(activity, new String[]{type}, REQUEST_CODE_PERMISSION);
+      cordova.requestPermission(this, 23456, type);
+    } else {
+      this.callbackContext.success();
     }
-    this.callbackContext.success();
+  }
+
+  @Override
+  public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException
+  {
+    if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+      this.callbackContext.success();
+    } else {
+      this.callbackContext.error("Permission denied");
+    }
   }
 
   @Override
