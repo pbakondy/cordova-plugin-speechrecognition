@@ -24,9 +24,6 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-
 import android.util.Log;
 import android.view.View;
 
@@ -215,8 +212,7 @@ public class SpeechRecognition extends CordovaPlugin {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
       return true;
     }
-    return (PackageManager.PERMISSION_GRANTED ==
-      ContextCompat.checkSelfPermission(activity, type));
+    return cordova.hasPermission(type);
   }
 
   private void requestPermission(String type) {
@@ -228,8 +224,7 @@ public class SpeechRecognition extends CordovaPlugin {
   }
 
   @Override
-  public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException
-  {
+  public void onRequestPermissionResult(int requestCode, String[] permissions, int[] grantResults) throws JSONException {
     if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
       this.callbackContext.success();
     } else {

@@ -131,7 +131,8 @@ This method requests access permission to system resources if it was not granted
 
 ### Requirements
 
-- Android 2.2 (API level 8)
+- cordova-android v5.0.0
+- Android API level 14
 - `<android:launchMode>` must not be `singleInstance`. It can be `singleTask`, `standard`, `singleTop`.
 - [RECORD_AUDIO](https://developer.android.com/reference/android/Manifest.permission.html#RECORD_AUDIO) permission
 

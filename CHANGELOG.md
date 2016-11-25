@@ -1,9 +1,14 @@
 # Changelog
 
+## v1.1.1
+
+- Android: use Cordova Permissions API
+- Android: drop Android Support Library requirement
+
 ## v1.1.0
 
 - Android: recognition is runnable in the background without popup window ( option `showPopup` )
-- modify parameters of function `startListening`
+- modify signature of function `startListening`
 - Android: real callbacks for `requestPermission`
 
 ## v1.0.5

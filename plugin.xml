@@ -2,7 +2,8 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
   id="cordova-plugin-speechrecognition"
-  version="1.1.0">
+  version="1.1.1">
+
   <name>Speech Recognition</name>
   <description>Cordova Plugin for Speech Recognition</description>
   <license>MIT</license>
@@ -12,6 +13,7 @@
 
   <engines>
     <engine name="cordova" version=">=3.0.0"/>
+    <engine name="cordova-android" version=">=5.0.0"/>
   </engines>
 
   <js-module src="www/speechRecognition.js" name="SpeechRecognition">
@@ -29,8 +31,6 @@
     <config-file target="AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.RECORD_AUDIO" />
     </config-file>
-
-    <framework src="com.android.support:support-v4:+" />
 
     <source-file src="src/android/com/pbakondy/SpeechRecognition.java" target-dir="src/com/pbakondy" />
     <source-file src="src/android/com/pbakondy/LanguageDetailsChecker.java" target-dir="src/com/pbakondy" />
