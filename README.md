@@ -127,6 +127,49 @@ window.plugins.speechRecognition.requestPermission(
 This method requests access permission to system resources if it was not granted before.
 
 
+### Ionic 2 Usage
+
+```typescript
+import { SpeechRecognition } from 'ionic-native';
+
+// Check feature available
+SpeechRecognition.isRecognitionAvailable()
+  .then((available: boolean) => console.log(available))
+
+// Start the recognition process
+SpeechRecognition.startListening(options)
+  .subscribe(
+    (matches: Array<string>) => console.log(matches),
+    (onerror) => console.log('error:', onerror)
+  )
+
+// Stop the recognition process (iOS only)
+SpeechRecognition.stopListening()
+
+// Get the list of supported languages
+SpeechRecognition.getSupportedLanguages()
+  .then(
+    (languages: Array<string>) => console.log(languages),
+    (error) => console.log(error)
+  )
+
+// Check permission
+SpeechRecognition.hasPermission()
+  .then((hasPermission: boolean) => console.log(hasPermission))
+
+// Request permissions
+SpeechRecognition.requestPermission()
+  .then(
+    () => console.log('Granted'),
+    () => console.log('Denied')
+  )
+```
+
+Required: [ionic-native](https://www.npmjs.com/package/ionic-native) v2.3.0
+
+See [Ionic Native documentation](https://ionicframework.com/docs/v2/native/speechrecognition/).
+
+
 ## Android Quirks
 
 ### Requirements
