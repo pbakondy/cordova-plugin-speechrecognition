@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.1.2
+
+- iOS: `startListening` do not run in background
+- iOS: `startListening` check existing process
+
 ## v1.1.1
 
 - Android: use Cordova Permissions API
