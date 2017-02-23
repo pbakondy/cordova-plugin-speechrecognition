@@ -20,6 +20,8 @@ cordova plugin add cordova-plugin-speechrecognition
 
 ## Usage
 
+This plugin requires internet connection.
+
 ### isRecognitionAvailable()
 
 ```js
