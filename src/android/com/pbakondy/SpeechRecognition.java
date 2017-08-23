@@ -274,6 +274,10 @@ public class SpeechRecognition extends CordovaPlugin {
     public void onError(int errorCode) {
       String errorMessage = getErrorText(errorCode);
       Log.d(LOG_TAG, "Error: " + errorMessage);
+      recognizer.stopListening();
+      recognizer.cancel();
+      recognizer.destroy();
+      recognizer.startListening();
       callbackContext.error(errorMessage);
     }
 
