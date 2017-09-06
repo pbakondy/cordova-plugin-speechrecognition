@@ -123,7 +123,16 @@ public class SpeechRecognition extends CordovaPlugin {
       }
 
       if (STOP_LISTENING.equals(action)) {
-        this.callbackContext.success();
+        final CallbackContext callbackContextStop = this.callbackContext;
+        view.post(new Runnable() {
+          @Override
+          public void run() {
+            if(recognizer != null) {
+              recognizer.stopListening();
+            }
+            callbackContextStop.success();
+          }
+        });
         return true;
       }
 
