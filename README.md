@@ -40,7 +40,7 @@ let options = {
   Number matches,
   String prompt,      // Android only
   Boolean showPopup,  // Android only
-  Boolean showPartial // iOS only
+  Boolean showPartial 
 }
 
 window.plugins.speechRecognition.startListening(
@@ -53,7 +53,7 @@ This method has an options parameter with the following optional values:
 - `matches` {Number} number of return matches (default `5`, on iOS: maximum number of matches)
 - `prompt` {String} displayed prompt of listener popup window (default `""`, Android only)
 - `showPopup` {Boolean} display listener popup window with prompt (default `true`, Android only)
-- `showPartial` {Boolean} Allow partial results to be returned (default `false`, iOS only)
+- `showPartial` {Boolean} Allow partial results to be returned (default `false`)
 
 Result of success callback is an `Array` of recognized terms.
 
