@@ -129,10 +129,14 @@ window.plugins.speechRecognition.requestPermission(
 This method requests access permission to system resources if it was not granted before.
 
 
-### Ionic 2 Usage
+### Ionic 3 Usage
 
 ```typescript
-import { SpeechRecognition } from 'ionic-native';
+import { SpeechRecognition } from '@ionic-native/speech-recognition';
+
+constructor(private speechRecognition: SpeechRecognition) { }
+
+...
 
 // Check feature available
 SpeechRecognition.isRecognitionAvailable()
@@ -167,9 +171,9 @@ SpeechRecognition.requestPermission()
   )
 ```
 
-Required: [ionic-native](https://www.npmjs.com/package/ionic-native) v2.3.0
+Required: [ionic-native/speech-recognition](https://www.npmjs.com/package/@ionic-native/speech-recognition)
 
-See [Ionic Native documentation](https://ionicframework.com/docs/v2/native/speechrecognition/).
+See [Ionic Native documentation](https://ionicframework.com/docs/native/speech-recognition/).
 
 
 ## Android Quirks
