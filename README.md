@@ -129,7 +129,7 @@ window.plugins.speechRecognition.requestPermission(
 This method requests access permission to system resources if it was not granted before.
 
 
-### Ionic 3 Usage
+### Ionic Usage
 
 ```typescript
 import { SpeechRecognition } from '@ionic-native/speech-recognition';
