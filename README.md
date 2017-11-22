@@ -63,8 +63,6 @@ If you set `showPartial` to `true` on iOS the success callback will be called mu
 
 ### stopListening()
 
-iOS only method.
-
 ```js
 window.plugins.speechRecognition.stopListening(
   Function successCallback, Function errorCallback)
