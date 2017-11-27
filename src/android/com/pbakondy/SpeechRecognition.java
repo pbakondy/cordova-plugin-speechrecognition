@@ -55,6 +55,7 @@ public class SpeechRecognition extends CordovaPlugin {
   private static final String RECORD_AUDIO_PERMISSION = Manifest.permission.RECORD_AUDIO;
 
   private final ReentrantLock lock = new ReentrantLock();
+  private boolean listening = false;
 
   private CallbackContext callbackContext;
   private LanguageDetailsChecker languageDetailsChecker;
@@ -182,7 +183,10 @@ public class SpeechRecognition extends CordovaPlugin {
         public void run() {
           try {
             SpeechRecognition.this.lock.lock();
-            recognizer.startListening(intent);
+            if(!SpeechRecognition.this.listening) {
+              recognizer.startListening(intent);
+              SpeechRecognition.this.listening(true);
+            }
           } catch (Exception e) {
             // ignore
           } finally {
@@ -200,7 +204,10 @@ public class SpeechRecognition extends CordovaPlugin {
       public void run() {
         try {
           SpeechRecognition.this.lock.lock();
-          recognizer.stopListening();
+          if(SpeechRecognition.this.listening) {
+            recognizer.stopListening();
+            SpeechRecognition.this.listening(false);
+          }
           SpeechRecognition.this.callbackContext.success();
         } catch (Exception e) {
           SpeechRecognition.this.callbackContext.error("Stop listening error: " + e.getMessage());
@@ -277,10 +284,18 @@ public class SpeechRecognition extends CordovaPlugin {
       } else {
         this.callbackContext.error(Integer.toString(resultCode));
       }
+      SpeechRecognition.this.lock.lock();
+      SpeechRecognition.this.listening(false);
+      SpeechRecognition.this.lock.unlock();
+
       return;
     }
 
     super.onActivityResult(requestCode, resultCode, data);
+  }
+
+  private void listening(boolean value) {
+    this.listening = value;
   }
 
 
@@ -300,6 +315,9 @@ public class SpeechRecognition extends CordovaPlugin {
 
     @Override
     public void onError(int errorCode) {
+      SpeechRecognition.this.lock.lock();
+      SpeechRecognition.this.listening(false);
+      SpeechRecognition.this.lock.unlock();
       String errorMessage = getErrorText(errorCode);
       Log.d(LOG_TAG, "Error: " + errorMessage);
       callbackContext.error(errorMessage);
@@ -329,6 +347,10 @@ public class SpeechRecognition extends CordovaPlugin {
       } catch (Exception e) {
         e.printStackTrace();
         callbackContext.error(e.getMessage());
+      } finally {
+        SpeechRecognition.this.lock.lock();
+        SpeechRecognition.this.listening(false);
+        SpeechRecognition.this.lock.unlock();
       }
     }
 
