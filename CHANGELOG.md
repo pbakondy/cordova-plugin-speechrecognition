@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0
+
+- Android: add `stopListening` [by Simone Compagnone]
+- Android: enable partial results [by Simone Compagnone]
+
 ## v1.1.2
 
 - iOS: `startListening` do not run in background
