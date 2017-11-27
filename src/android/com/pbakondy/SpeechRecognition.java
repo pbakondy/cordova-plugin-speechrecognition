@@ -30,6 +30,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SpeechRecognition extends CordovaPlugin {
 
@@ -53,6 +54,8 @@ public class SpeechRecognition extends CordovaPlugin {
 
   private static final String RECORD_AUDIO_PERMISSION = Manifest.permission.RECORD_AUDIO;
 
+  private final ReentrantLock lock = new ReentrantLock();
+
   private CallbackContext callbackContext;
   private LanguageDetailsChecker languageDetailsChecker;
   private Activity activity;
@@ -71,9 +74,9 @@ public class SpeechRecognition extends CordovaPlugin {
     view.post(new Runnable() {
       @Override
       public void run() {
-        recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
-        SpeechRecognitionListener listener = new SpeechRecognitionListener();
-        recognizer.setRecognitionListener(listener);
+          recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+          SpeechRecognitionListener listener = new SpeechRecognitionListener();
+          recognizer.setRecognitionListener(listener);
       }
     });
 
@@ -177,7 +180,14 @@ public class SpeechRecognition extends CordovaPlugin {
       view.post(new Runnable() {
         @Override
         public void run() {
-          recognizer.startListening(intent);
+          try {
+            SpeechRecognition.this.lock.lock();
+            recognizer.startListening(intent);
+          } catch (Exception e) {
+            // ignore
+          } finally {
+            SpeechRecognition.this.lock.unlock();
+          }
         }
       });
 
@@ -189,10 +199,13 @@ public class SpeechRecognition extends CordovaPlugin {
       @Override
       public void run() {
         try {
+          SpeechRecognition.this.lock.lock();
           recognizer.stopListening();
           SpeechRecognition.this.callbackContext.success();
         } catch (Exception e) {
           SpeechRecognition.this.callbackContext.error("Stop listening error: " + e.getMessage());
+        } finally {
+          SpeechRecognition.this.lock.unlock();
         }
       }
     });
