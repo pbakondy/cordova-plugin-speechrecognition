@@ -185,21 +185,17 @@ public class SpeechRecognition extends CordovaPlugin {
   }
 
   private void stopListening() {
-    if (!showPopup) {
-      view.post(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            recognizer.stopListening();
-            this.callbackContext.success();
-          } catch (Exception e) {
-            this.callbackContext.error("Stop listening error: " + e.getMessage());
-          }
+    view.post(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          recognizer.stopListening();
+          SpeechRecognition.this.callbackContext.success();
+        } catch (Exception e) {
+          SpeechRecognition.this.callbackContext.error("Stop listening error: " + e.getMessage());
         }
-      });
-    } else {
-      this.callbackContext.success("Stop listening not supported with show popup!");
-    }
+      }
+    });
   }
 
   private void getSupportedLanguages() {
