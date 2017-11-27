@@ -123,7 +123,8 @@ public class SpeechRecognition extends CordovaPlugin {
       }
 
       if (STOP_LISTENING.equals(action)) {
-        this.callbackContext.success();
+        stopListening();
+        // this.callbackContext.success();
         return true;
       }
 
@@ -181,6 +182,20 @@ public class SpeechRecognition extends CordovaPlugin {
       });
 
     }
+  }
+
+  private void stopListening() {
+    view.post(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          recognizer.stopListening();
+          SpeechRecognition.this.callbackContext.success();
+        } catch (Exception e) {
+          SpeechRecognition.this.callbackContext.error("Stop listening error: " + e.getMessage());
+        }
+      }
+    });
   }
 
   private void getSupportedLanguages() {
