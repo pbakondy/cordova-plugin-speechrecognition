@@ -72,15 +72,7 @@ public class SpeechRecognition extends CordovaPlugin {
     context = webView.getContext();
     view = webView.getView();
 
-    view.post(new Runnable() {
-      @Override
-      public void run() {
-          recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
-          SpeechRecognitionListener listener = new SpeechRecognitionListener();
-          recognizer.setRecognitionListener(listener);
-      }
-    });
-
+    initRecognizer();
   }
 
   @Override
@@ -157,6 +149,30 @@ public class SpeechRecognition extends CordovaPlugin {
 
   private boolean isRecognitionAvailable() {
     return SpeechRecognizer.isRecognitionAvailable(context);
+  }
+
+  private void initRecognizer() {
+    view.post(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          SpeechRecognition.this.lock.lock();
+          if (recognizer!=null) {
+            recognizer.cancel();
+            recognizer.destroy();
+            recognizer = null;
+          }
+          recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+          SpeechRecognitionListener listener = new SpeechRecognitionListener();
+          recognizer.setRecognitionListener(listener);
+          SpeechRecognition.this.listening(false);
+        } catch (Exception e) {
+          SpeechRecognition.this.callbackContext.error("Recognizer init error: " + e.getMessage());
+        } finally {
+          SpeechRecognition.this.lock.unlock();
+        }
+      }
+    });
   }
 
   private void startListening(String language, int matches, String prompt, Boolean showPopup) {
@@ -315,7 +331,7 @@ public class SpeechRecognition extends CordovaPlugin {
 
     @Override
     public void onError(int errorCode) {
-      stopListening()
+      SpeechRecognition.this.stopListening();
       // SpeechRecognition.this.lock.lock();
       // SpeechRecognition.this.listening(false);
       // SpeechRecognition.this.lock.unlock();
