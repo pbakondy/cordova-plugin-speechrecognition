@@ -40,6 +40,7 @@ public class SpeechRecognition extends CordovaPlugin {
   private static final int REQUEST_CODE_SPEECH = 2002;
 
   private static final String IS_RECOGNITION_AVAILABLE = "isRecognitionAvailable";
+  private static final String INIT_LISTENING = "initListening";
   private static final String START_LISTENING = "startListening";
   private static final String STOP_LISTENING = "stopListening";
   private static final String GET_SUPPORTED_LANGUAGES = "getSupportedLanguages";
@@ -72,7 +73,7 @@ public class SpeechRecognition extends CordovaPlugin {
     context = webView.getContext();
     view = webView.getView();
 
-    initRecognizer();
+    // initListening();
   }
 
   @Override
@@ -86,6 +87,11 @@ public class SpeechRecognition extends CordovaPlugin {
         boolean available = isRecognitionAvailable();
         PluginResult result = new PluginResult(PluginResult.Status.OK, available);
         callbackContext.sendPluginResult(result);
+        return true;
+      }
+
+      if (INIT_LISTENING.equals(action)) {
+        initListening();
         return true;
       }
 
@@ -151,7 +157,7 @@ public class SpeechRecognition extends CordovaPlugin {
     return SpeechRecognizer.isRecognitionAvailable(context);
   }
 
-  private void initRecognizer() {
+  private void initListening() {
     view.post(new Runnable() {
       @Override
       public void run() {
@@ -166,6 +172,7 @@ public class SpeechRecognition extends CordovaPlugin {
           SpeechRecognitionListener listener = new SpeechRecognitionListener();
           recognizer.setRecognitionListener(listener);
           SpeechRecognition.this.listening(false);
+          SpeechRecognition.this.callbackContext.success();
         } catch (Exception e) {
           SpeechRecognition.this.callbackContext.error("Recognizer init error: " + e.getMessage());
         } finally {
@@ -199,10 +206,19 @@ public class SpeechRecognition extends CordovaPlugin {
         public void run() {
           try {
             SpeechRecognition.this.lock.lock();
-            if(!SpeechRecognition.this.listening) {
-              recognizer.startListening(intent);
-              SpeechRecognition.this.listening(true);
+
+            // init
+            if (recognizer!=null) {
+              recognizer.cancel();
+              recognizer.destroy();
+              recognizer = null;
             }
+            recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+            SpeechRecognitionListener listener = new SpeechRecognitionListener();
+            recognizer.setRecognitionListener(listener);
+
+            recognizer.startListening(intent);
+            SpeechRecognition.this.listening(true);
           } catch (Exception e) {
             // ignore
           } finally {
