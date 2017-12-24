@@ -22,18 +22,18 @@
 
   <!-- android -->
   <platform name="android">
-    <config-file target="res/xml/config.xml" parent="/*">
+    <config-file target="app/src/main/res/xml/config.xml" parent="/*">
       <feature name="SpeechRecognition">
         <param name="android-package" value="com.pbakondy.SpeechRecognition"/>
       </feature>
     </config-file>
 
-    <config-file target="AndroidManifest.xml" parent="/*">
+    <config-file target="app/src/main/AndroidManifest.xml" parent="/*">
       <uses-permission android:name="android.permission.RECORD_AUDIO" />
     </config-file>
 
-    <source-file src="src/android/com/pbakondy/SpeechRecognition.java" target-dir="src/com/pbakondy" />
-    <source-file src="src/android/com/pbakondy/LanguageDetailsChecker.java" target-dir="src/com/pbakondy" />
+    <source-file src="src/android/com/pbakondy/SpeechRecognition.java" target-dir="app/src/main/java/com/pbakondy" />
+    <source-file src="src/android/com/pbakondy/LanguageDetailsChecker.java" target-dir="app/src/main/java/com/pbakondy" />
   </platform>
 
   <!-- ios -->
