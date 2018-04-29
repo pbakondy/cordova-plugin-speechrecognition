@@ -32,5 +32,8 @@
   "bugs": {
     "url": "https://github.com/pbakondy/cordova-plugin-speechrecognition/issues"
   },
-  "homepage": "https://github.com/pbakondy/cordova-plugin-speechrecognition#readme"
+  "homepage": "https://github.com/pbakondy/cordova-plugin-speechrecognition#readme",
+  "publishConfig" : {
+    "registry" : "https://nexus.pelotoninnovations.com/repository/npm-internal/"
+  }
 }
