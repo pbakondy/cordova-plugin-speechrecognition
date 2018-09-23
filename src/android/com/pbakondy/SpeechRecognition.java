@@ -181,12 +181,16 @@ public class SpeechRecognition extends CordovaPlugin {
     if (showPopup) {
       cordova.startActivityForResult(this, intent, REQUEST_CODE_SPEECH);
     } else {
-      view.post(new Runnable() {
-        @Override
-        public void run() {
-          recognizer.startListening(intent);
+      try{
+          view.post(new Runnable() {
+            @Override
+            public void run() {
+              recognizer.startListening(intent);
+            }
+          });
+       }catch (Exception e){
+          this.callbackContext.error(Integer.toString(56587));        
         }
-      });
     }
   }
 
