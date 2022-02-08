@@ -81,8 +81,8 @@
         }
 
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
-        [audioSession setMode:AVAudioSessionModeDefault error:nil];
+        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [audioSession setMode:AVAudioSessionModeMeasurement error:nil];
         [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 
         self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
@@ -142,10 +142,28 @@
                 self.recognitionTask = nil;
             }
         }];
+        
+        @try {
+            [inputNode installTapOnBus:0 bufferSize:1024 format:format block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
+                [self.recognitionRequest appendAudioPCMBuffer:buffer];
+            }];
+        } @catch (NSException *exception) {
+            NSLog(@"startListening() recognitionTask error: %@", exception);
 
-        [inputNode installTapOnBus:0 bufferSize:1024 format:format block:^(AVAudioPCMBuffer *buffer, AVAudioTime *when) {
-            [self.recognitionRequest appendAudioPCMBuffer:buffer];
-        }];
+            [self.audioEngine stop];
+            [self.audioEngine.inputNode removeTapOnBus:0];
+
+            self.recognitionRequest = nil;
+            self.recognitionTask = nil;
+            
+            NSString *errorMicInUse = @"Microphone in use by another app(iOS)";
+            
+            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMicInUse];
+            if (showPartial){
+                [pluginResult setKeepCallbackAsBool:YES];
+            }
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        }
 
         [self.audioEngine prepare];
         [self.audioEngine startAndReturnError:nil];
