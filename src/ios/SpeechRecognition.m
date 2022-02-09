@@ -81,8 +81,8 @@
         }
 
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
-        [audioSession setMode:AVAudioSessionModeMeasurement error:nil];
+        [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error:nil];
+        [audioSession setMode:AVAudioSessionModeDefault error:nil];
         [audioSession setActive:YES withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 
         self.recognitionRequest = [[SFSpeechAudioBufferRecognitionRequest alloc] init];
