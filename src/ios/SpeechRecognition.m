@@ -15,7 +15,7 @@
 #define MESSAGE_RESTRICTED @"Speech recognition restricted on this device"
 #define MESSAGE_NOT_DETERMINED @"Speech recognition not determined on this device"
 #define MESSAGE_ACCESS_DENIED_MICROPHONE @"User denied access to microphone"
-#define MESSAGE_ONGOING @"Ongoing speech recognition"
+#define MESSAGE_COULD_NOT_START_SPEECHRECOGNITION @"Could not start Speech Recongition. Microphone maybe in use by another app"
 
 @interface SpeechRecognition()
 
@@ -157,9 +157,7 @@
             self.recognitionRequest = nil;
             self.recognitionTask = nil;
             
-            NSString *errorMicInUse = @"Microphone in use by another app(iOS)";
-            
-            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMicInUse];
+            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:MESSAGE_COULD_NOT_START_SPEECHRECOGNITION];
             if (showPartial){
                 [pluginResult setKeepCallbackAsBool:YES];
             }
