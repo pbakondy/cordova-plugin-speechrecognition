@@ -15,7 +15,8 @@
 #define MESSAGE_RESTRICTED @"Speech recognition restricted on this device"
 #define MESSAGE_NOT_DETERMINED @"Speech recognition not determined on this device"
 #define MESSAGE_ACCESS_DENIED_MICROPHONE @"User denied access to microphone"
-#define MESSAGE_COULD_NOT_START_SPEECHRECOGNITION @"Could not start Speech Recongition. Microphone maybe in use by another app"
+#define MESSAGE_ONGOING @"Ongoing speech recognition"
+#define MESSAGE_COULD_NOT_START_SPEECHRECOGNITION @"Could not start Speech Recongition. Maybe Microphone is in use by another app"
 
 @interface SpeechRecognition()
 
