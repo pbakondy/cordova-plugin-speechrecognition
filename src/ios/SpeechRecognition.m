@@ -16,7 +16,7 @@
 #define MESSAGE_NOT_DETERMINED @"Speech recognition not determined on this device"
 #define MESSAGE_ACCESS_DENIED_MICROPHONE @"User denied access to microphone"
 #define MESSAGE_ONGOING @"Ongoing speech recognition"
-#define MESSAGE_COULD_NOT_START_SPEECHRECOGNITION @"Could not start Speech Recongition. Microphone maybe busy."
+#define MESSAGE_COULD_NOT_START_SPEECHRECOGNITION @"Could not start Speech Recognition. Microphone maybe busy"
 
 @interface SpeechRecognition()
 
