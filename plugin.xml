@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
   xmlns:android="http://schemas.android.com/apk/res/android"
-  id="cordova-plugin-speechrecognition"
-  version="1.2.0">
+  id="@spoonconsulting/cordova-plugin-speechrecognition"
+  version="1.3.0">
 
   <name>Speech Recognition</name>
   <description>Cordova Plugin for Speech Recognition</description>
   <license>MIT</license>
   <keywords>cordova,speech,recognition</keywords>
-  <repo>https://github.com/pbakondy/cordova-plugin-speechrecognition</repo>
-  <issue>https://github.com/pbakondy/cordova-plugin-speechrecognition/issues</issue>
+  <repo>https://github.com/spoonconsulting/cordova-plugin-speechrecognition</repo>
+  <issue>https://github.com/spoonconsulting/cordova-plugin-speechrecognition/issues</issue>
 
   <engines>
     <engine name="cordova" version=">=3.0.0"/>

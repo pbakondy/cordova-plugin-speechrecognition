@@ -10,7 +10,7 @@ This is a cordova plugin for Speech Recognition.
 ## Installation
 
 ```
-cordova plugin add cordova-plugin-speechrecognition
+cordova plugin add @spoonconsulting/cordova-plugin-speechrecognition
 ```
 
 ## Supported Platforms
@@ -220,7 +220,7 @@ The plugin works in [AVAudioSessionCategoryPlayAndRecord](https://developer.appl
 ### Peter Bakondy
 
 - https://github.com/pbakondy
-
+- https://github.com/spoonconsulting
 
 ## LICENSE
 
