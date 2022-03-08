@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.3.0
+## v1.2.1
 
 - iOS: Catch exception when Microphone in use by another application
 
