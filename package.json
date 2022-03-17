@@ -27,7 +27,7 @@
       "version": ">=3.0.0"
     }
   ],
-  "author": "Peter Bakondy & Spoon Consulting Ltd",
+  "author": "Peter Bakondy",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pbakondy/cordova-plugin-speechrecognition/issues"
