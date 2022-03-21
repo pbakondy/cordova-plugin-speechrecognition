@@ -33,7 +33,7 @@
 @implementation SpeechRecognition
 
 - (void)isRecognitionAvailable:(CDVInvokedUrlCommand*)command {
-    [self runBlockInBackgroundWithTryCatch:^{
+    [self runBlockWithTryCatch:^{
         CDVPluginResult *pluginResult = nil;
 
         if ([SFSpeechRecognizer class]) {
@@ -47,7 +47,7 @@
 }
 
 - (void)startListening:(CDVInvokedUrlCommand*)command {
-    [self runBlockInBackgroundWithTryCatch:^{
+    [self runBlockWithTryCatch:^{
         if ( self.audioEngine.isRunning ) {
             CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:MESSAGE_ONGOING];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -183,7 +183,7 @@
 }
 
 - (void)stopListening:(CDVInvokedUrlCommand*)command {
-    [self runBlockInBackgroundWithTryCatch:^{
+    [self runBlockWithTryCatch:^{
         [self.commandDelegate runInBackground:^{
             NSLog(@"stopListening()");
 
@@ -199,7 +199,7 @@
 }
 
 - (void)getSupportedLanguages:(CDVInvokedUrlCommand*)command {
-    [self runBlockInBackgroundWithTryCatch:^{
+    [self runBlockWithTryCatch:^{
         NSSet<NSLocale *> *supportedLocales = [SFSpeechRecognizer supportedLocales];
 
         NSMutableArray *localesArray = [[NSMutableArray alloc] init];
@@ -214,7 +214,7 @@
 }
 
 - (void)hasPermission:(CDVInvokedUrlCommand*)command {
-    [self runBlockInBackgroundWithTryCatch:^{
+    [self runBlockWithTryCatch:^{
         SFSpeechRecognizerAuthorizationStatus status = [SFSpeechRecognizer authorizationStatus];
         BOOL speechAuthGranted = (status == SFSpeechRecognizerAuthorizationStatusAuthorized);
 
@@ -232,7 +232,7 @@
 }
 
 - (void)requestPermission:(CDVInvokedUrlCommand*)command {
-    [self runBlockInBackgroundWithTryCatch:^{
+    [self runBlockWithTryCatch:^{
         [SFSpeechRecognizer requestAuthorization:^(SFSpeechRecognizerAuthorizationStatus status){
             dispatch_async(dispatch_get_main_queue(), ^{
                 CDVPluginResult *pluginResult = nil;
@@ -275,15 +275,13 @@
     } forCommand:command];
 }
 
--(void)runBlockInBackgroundWithTryCatch:(void (^)(void))block forCommand:(CDVInvokedUrlCommand*)command{
-    [self.commandDelegate runInBackground:^{
-        @try {
-            block();
-        } @catch (NSException *exception) {
-            CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:MESSAGE_PLUGIN_ERROR];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        }
-    }];
+-(void)runBlockWithTryCatch:(void (^)(void))block forCommand:(CDVInvokedUrlCommand*)command{
+    @try {
+        block();
+    } @catch (NSException *exception) {
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:MESSAGE_PLUGIN_ERROR];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
 }
 
 @end
