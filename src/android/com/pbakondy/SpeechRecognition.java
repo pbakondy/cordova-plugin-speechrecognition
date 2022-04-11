@@ -82,26 +82,26 @@ public class SpeechRecognition extends CordovaPlugin {
 
   @Override
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-    runBlockWithTryCatch(() -> {
-      this.callbackContext = callbackContext;
+    this.callbackContext = callbackContext;
 
-      Log.d(LOG_TAG, "execute() action " + action);
+    Log.d(LOG_TAG, "execute() action " + action);
 
+    try {
       if (IS_RECOGNITION_AVAILABLE.equals(action)) {
         boolean available = isRecognitionAvailable();
         PluginResult result = new PluginResult(PluginResult.Status.OK, available);
         callbackContext.sendPluginResult(result);
-        return;
+        return true;
       }
 
       if (START_LISTENING.equals(action)) {
         if (!isRecognitionAvailable()) {
           callbackContext.error(NOT_AVAILABLE);
-          return;
+          return true;
         }
         if (!audioPermissionGranted(RECORD_AUDIO_PERMISSION)) {
           callbackContext.error(MISSING_PERMISSION);
-          return;
+          return true;
         }
 
         String lang = args.optString(0);
@@ -119,9 +119,9 @@ public class SpeechRecognition extends CordovaPlugin {
         mLastPartialResults = new JSONArray();
         Boolean showPartial = args.optBoolean(3, false);
         Boolean showPopup = args.optBoolean(4, true);
-        startListening(lang, matches, prompt, showPartial, showPopup);
+        startListening(lang, matches, prompt,showPartial, showPopup);
 
-        return;
+        return true;
       }
 
       if (STOP_LISTENING.equals(action)) {
@@ -129,34 +129,36 @@ public class SpeechRecognition extends CordovaPlugin {
         view.post(new Runnable() {
           @Override
           public void run() {
-            runBlockWithTryCatch(() -> {
-              if (recognizer != null) {
-                recognizer.stopListening();
-              }
-              callbackContextStop.success();
-            });
+            if(recognizer != null) {
+              recognizer.stopListening();
+            }
+            callbackContextStop.success();
           }
         });
-        return;
+        return true;
       }
 
       if (GET_SUPPORTED_LANGUAGES.equals(action)) {
         getSupportedLanguages();
-        return;
+        return true;
       }
 
       if (HAS_PERMISSION.equals(action)) {
         hasAudioPermission();
-        return;
+        return true;
       }
 
       if (REQUEST_PERMISSION.equals(action)) {
         requestAudioPermission();
-        return;
+        return true;
       }
-    });
 
-    return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      callbackContext.error(e.getMessage());
+    }
+
+    return false;
   }
 
   private boolean isRecognitionAvailable() {
