@@ -70,9 +70,11 @@ public class SpeechRecognition extends CordovaPlugin {
       view.post(new Runnable() {
         @Override
         public void run() {
-          recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
-          SpeechRecognitionListener listener = new SpeechRecognitionListener();
-          recognizer.setRecognitionListener(listener);
+          runBlockWithTryCatch(() -> {
+            recognizer = SpeechRecognizer.createSpeechRecognizer(activity);
+            SpeechRecognitionListener listener = new SpeechRecognitionListener();
+            recognizer.setRecognitionListener(listener);
+          });
         }
       });
     });
@@ -187,11 +189,12 @@ public class SpeechRecognition extends CordovaPlugin {
         view.post(new Runnable() {
           @Override
           public void run() {
-            recognizer.startListening(intent);
+            runBlockWithTryCatch(() -> {
+              recognizer.startListening(intent);
+            });
           }
         });
       }
-    });
   }
 
   private void getSupportedLanguages() {
@@ -255,25 +258,21 @@ public class SpeechRecognition extends CordovaPlugin {
 
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
+    runBlockWithTryCatch(() -> {
+      Log.d(LOG_TAG, "onActivityResult() requestCode: " + requestCode + ", resultCode: " + resultCode);
 
-    if (requestCode == REQUEST_CODE_SPEECH) {
-      if (resultCode == Activity.RESULT_OK) {
-        try {
+      if (requestCode == REQUEST_CODE_SPEECH) {
+        if (resultCode == Activity.RESULT_OK) {
           ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
           JSONArray jsonMatches = new JSONArray(matches);
           this.callbackContext.success(jsonMatches);
-        } catch (Exception e) {
-          e.printStackTrace();
-          this.callbackContext.error(e.getMessage());
+        } else {
+          this.callbackContext.error(Integer.toString(resultCode));
         }
-      } else {
-        this.callbackContext.error(Integer.toString(resultCode));
+        return;
       }
-      return;
-    }
-
-    super.onActivityResult(requestCode, resultCode, data);
+      super.onActivityResult(requestCode, resultCode, data);
+    });
   }
 
 
