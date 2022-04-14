@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.2.1
+
+- iOS: Catch exception when Microphone in use by another application
+
 ## v1.2.0
 
 - Android: add `stopListening` [by Simone Compagnone]

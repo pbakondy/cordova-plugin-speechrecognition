@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-speechrecognition",
-  "version": "1.2.0",
+  "name": "@spoonconsulting/cordova-plugin-speechrecognition",
+  "version": "1.2.1",
   "description": "Cordova Plugin for Speech Recognition",
   "cordova": {
-    "id": "cordova-plugin-speechrecognition",
+    "id": "@spoonconsulting/cordova-plugin-speechrecognition",
     "platforms": [
       "android",
       "ios"
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pbakondy/cordova-plugin-speechrecognition.git"
+    "url": "https://github.com/spoonconsulting/cordova-plugin-speechrecognition.git"
   },
   "keywords": [
     "cordova",
@@ -27,10 +27,10 @@
       "version": ">=3.0.0"
     }
   ],
-  "author": "Peter Bakondy",
+  "author": "Peter Bakondy & Spoon Consulting Ltd",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pbakondy/cordova-plugin-speechrecognition/issues"
+    "url": "https://github.com/spoonconsulting/cordova-plugin-speechrecognition/issues"
   },
-  "homepage": "https://github.com/pbakondy/cordova-plugin-speechrecognition#readme"
+  "homepage": "https://github.com/spoonconsulting/cordova-plugin-speechrecognition#readme"
 }
