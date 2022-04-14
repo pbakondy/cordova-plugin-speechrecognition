@@ -173,77 +173,61 @@ public class SpeechRecognition extends CordovaPlugin {
   }
 
   private void startListening(String language, int matches, String prompt, final Boolean showPartial, Boolean showPopup) {
-    try {
-      Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt + ", showPartial: " + showPartial + ", showPopup: " + showPopup);
+    Log.d(LOG_TAG, "startListening() language: " + language + ", matches: " + matches + ", prompt: " + prompt + ", showPartial: " + showPartial + ", showPopup: " + showPopup);
 
-      final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-      intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-              RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-      intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
-      intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, matches);
-      intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
-              activity.getPackageName());
-      intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, showPartial);
-      intent.putExtra("android.speech.extra.DICTATION_MODE", showPartial);
+    final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+    intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, matches);
+    intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
+            activity.getPackageName());
+    intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, showPartial);
+    intent.putExtra("android.speech.extra.DICTATION_MODE", showPartial);
 
-      if (prompt != null) {
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
-      }
+    if (prompt != null) {
+      intent.putExtra(RecognizerIntent.EXTRA_PROMPT, prompt);
+    }
 
-      if (showPopup) {
-        cordova.startActivityForResult(this, intent, REQUEST_CODE_SPEECH);
-      } else {
-        view.post(new Runnable() {
-          @Override
-          public void run() {
-            try {
-              recognizer.startListening(intent);
-            } catch (Exception e) {
-              exceptionCallback(e);
-            }
+    if (showPopup) {
+      cordova.startActivityForResult(this, intent, REQUEST_CODE_SPEECH);
+    } else {
+      view.post(new Runnable() {
+        @Override
+        public void run() {
+          try {
+            recognizer.startListening(intent);
+          } catch (Exception e) {
+            exceptionCallback(e);
           }
-        });
-      }
-    } catch (Exception e) {
-      exceptionCallback(e);
+        }
+      });
     }
   }
 
   private void getSupportedLanguages() {
-    try {
-      if (languageDetailsChecker == null) {
-        languageDetailsChecker = new LanguageDetailsChecker(callbackContext);
-      }
-
-      List<String> supportedLanguages = languageDetailsChecker.getSupportedLanguages();
-      if (supportedLanguages != null) {
-        JSONArray languages = new JSONArray(supportedLanguages);
-        callbackContext.success(languages);
-        return;
-      }
-
-      Intent detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
-      activity.sendOrderedBroadcast(detailsIntent, null, languageDetailsChecker, null, Activity.RESULT_OK, null, null);
-    } catch (Exception e) {
-      exceptionCallback(e);
+    if (languageDetailsChecker == null) {
+      languageDetailsChecker = new LanguageDetailsChecker(callbackContext);
     }
+
+    List<String> supportedLanguages = languageDetailsChecker.getSupportedLanguages();
+    if (supportedLanguages != null) {
+      JSONArray languages = new JSONArray(supportedLanguages);
+      callbackContext.success(languages);
+      return;
+    }
+
+    Intent detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
+    activity.sendOrderedBroadcast(detailsIntent, null, languageDetailsChecker, null, Activity.RESULT_OK, null, null);
   }
 
   private void hasAudioPermission() {
-    try {
-      PluginResult result = new PluginResult(PluginResult.Status.OK, audioPermissionGranted(RECORD_AUDIO_PERMISSION));
-      this.callbackContext.sendPluginResult(result);
-    } catch (Exception e) {
-      exceptionCallback(e);
-    }
+    PluginResult result = new PluginResult(PluginResult.Status.OK, audioPermissionGranted(RECORD_AUDIO_PERMISSION));
+    this.callbackContext.sendPluginResult(result);
   }
 
   private void requestAudioPermission() {
-    try {
-      requestPermission(RECORD_AUDIO_PERMISSION);
-    } catch(Exception e) {
-      exceptionCallback(e);
-    }
+    requestPermission(RECORD_AUDIO_PERMISSION);
   }
 
   private boolean audioPermissionGranted(String type) {
@@ -254,14 +238,10 @@ public class SpeechRecognition extends CordovaPlugin {
   }
 
   private void requestPermission(String type) {
-    try {
-      if (!audioPermissionGranted(type)) {
-        cordova.requestPermission(this, 23456, type);
-      } else {
-        this.callbackContext.success();
-      }
-    } catch (Exception e) {
-      exceptionCallback(e);
+    if (!audioPermissionGranted(type)) {
+      cordova.requestPermission(this, 23456, type);
+    } else {
+      this.callbackContext.success();
     }
   }
 
