@@ -253,7 +253,7 @@ public class SpeechRecognition extends CordovaPlugin {
       } else {
         this.callbackContext.error("Permission denied");
       }
-    } catch(Exception e) {
+    } catch (Exception e) {
       exceptionCallback(e);
     }
   }
